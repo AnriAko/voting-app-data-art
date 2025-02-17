@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import getJoke from "@/utils/getJoke";
+import JokeService from "@/Service/JokeService";
 
 async function handleGetJoke(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const joke = await getJoke();
-
+        const jokeService = new JokeService();
+        const joke = await jokeService.createJoke();
         if (joke) {
             res.status(200).json(joke);
         } else {

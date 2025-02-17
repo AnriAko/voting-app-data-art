@@ -6,6 +6,7 @@ export interface Vote {
 }
 
 export interface Joke extends Document {
+    _id: string;
     question: string;
     answer: string;
     votes: Vote[];
@@ -18,10 +19,11 @@ const voteSchema = new Schema<Vote>({
 });
 
 const jokeSchema = new Schema<Joke>({
+    _id: { type: String, required: true, unique: true },
     question: { type: String, required: true },
     answer: { type: String, required: true },
     votes: { type: [voteSchema], default: [] },
-    availableVotes: { type: [String], default: [] },
+    availableVotes: { type: [String], default: ["😂", "👍", "❤️"] },
 });
 
 const JokeModel =

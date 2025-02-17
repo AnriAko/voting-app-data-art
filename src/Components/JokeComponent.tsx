@@ -16,6 +16,7 @@ export default function JokeComponent() {
             if (!res.ok) throw new Error("Failed to fetch joke");
             return res.json();
         },
+        enabled: false,
     });
 
     const handleNextJoke = async () => {
