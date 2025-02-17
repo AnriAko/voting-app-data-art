@@ -1,4 +1,4 @@
-export interface Joke {
+export interface THJoke {
     id: string;
     question: string;
     answer: string;

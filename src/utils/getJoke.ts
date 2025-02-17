@@ -1,13 +1,13 @@
-import { Joke } from "./joke";
+import { THJoke } from "./joke";
 
-const getJoke = async (): Promise<Joke | undefined> => {
+const getJoke = async (): Promise<THJoke | undefined> => {
     try {
         const response = await fetch("https://teehee.dev/api/joke");
 
         if (!response.ok) {
             throw new Error(`Error HTTP: ${response.status}`);
         }
-        const data: Joke = await response.json();
+        const data: THJoke = await response.json();
         return data;
     } catch (error: unknown) {
         if (error instanceof Error) {
