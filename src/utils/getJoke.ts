@@ -1,8 +1,8 @@
-import { THJoke } from "./THjoke";
+import { THJoke } from './THjoke';
 
 const getJoke = async (): Promise<THJoke | undefined> => {
     try {
-        const response = await fetch("https://teehee.dev/api/joke");
+        const response = await fetch('https://teehee.dev/api/joke');
 
         if (!response.ok) {
             throw new Error(`Error HTTP: ${response.status}`);
@@ -11,9 +11,9 @@ const getJoke = async (): Promise<THJoke | undefined> => {
         return data;
     } catch (error: unknown) {
         if (error instanceof Error) {
-            console.error("Error:", error.message);
+            console.error('Error:', error.message);
         } else {
-            console.error("Unknown error.");
+            console.error('Unknown error.');
         }
     }
 };

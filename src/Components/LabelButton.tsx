@@ -6,7 +6,7 @@ interface LabelButtonProps {
     label: string;
     value: number;
     jokeId: string;
-    updateJoke: (updatedJoke: Joke) => void; // Функция для обновления шутки
+    updateJoke: (updatedJoke: Joke) => void;
 }
 
 const handleClick = async (
@@ -19,7 +19,6 @@ const handleClick = async (
             label,
         });
 
-        // Обновление шутки после успешного голосования
         updateJoke(response.data);
     } catch (error) {
         console.error('Error voting on joke:', error);

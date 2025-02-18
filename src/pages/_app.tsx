@@ -1,5 +1,5 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AppProps } from "next/app";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AppProps } from 'next/app';
 
 const queryClient = new QueryClient();
 

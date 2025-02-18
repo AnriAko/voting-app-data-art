@@ -1,34 +1,22 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { QueryObserverResult, useQuery } from '@tanstack/react-query';
-import type { Joke, Vote } from '@/Types/jokeType';
+import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import type { Joke } from '@/Types/jokeType';
 import LabelButton from './LabelButton';
-
-interface JokeProps {
-    setRefetchJoke: Dispatch<
-        SetStateAction<() => Promise<QueryObserverResult<Joke, Error>> | null>
-    >;
-    isFetching: boolean;
-}
-
-const initialVote: Vote = {
-    value: 0,
-    label: '',
-};
+import NextJokeButton from './NextJokeButton';
 
 const initialJoke: Joke = {
     _id: '',
     question: '',
     answer: '',
-    votes: [initialVote],
+    votes: [{ value: 0, label: '' }],
     availableVotes: [],
 };
 
-export default function Joke({ setRefetchJoke, isFetching }: JokeProps) {
-    const [isLoadingJoke, setIsLoadingJoke] = useState(true);
-    const [joke, setJoke] = useState<Joke>(initialJoke);
-
+export default function Joke() {
+    const [isFetchingNewJoke, setIsFetchingNewJoke] = useState(false);
+    const [displayedJoke, setDisplayedJoke] = useState<Joke>(initialJoke);
     const {
-        data: fetchedJoke = initialJoke, // Fetch the joke data here
+        data: joke = initialJoke,
         isLoading,
         isError,
         refetch,
@@ -36,46 +24,56 @@ export default function Joke({ setRefetchJoke, isFetching }: JokeProps) {
         queryKey: ['joke'],
         queryFn: async () => {
             const res = await fetch('/api/joke/dead-men-tell-no');
-            if (!res.ok) {
-                throw new Error('Failed to fetch joke');
-            }
+            if (!res.ok) throw new Error('Failed to fetch joke');
             return res.json();
         },
-        enabled: isLoadingJoke,
     });
-
-    // Update the joke state with fetched data
     useEffect(() => {
-        if (!isLoading) {
-            setIsLoadingJoke(false);
-            setJoke(fetchedJoke); // Use the fetched joke data
+        if (joke._id) {
+            setDisplayedJoke(joke);
         }
-        if (refetch && setRefetchJoke) {
-            setRefetchJoke(() => refetch);
-        }
-    }, [isLoading, fetchedJoke, refetch, setRefetchJoke]);
+    }, [joke]);
 
-    if (isLoading && !isFetching) return <p>Loading...</p>;
+    const handleNextJoke = async () => {
+        setIsFetchingNewJoke(true);
+        try {
+            await refetch();
+        } finally {
+            setIsFetchingNewJoke(false);
+        }
+    };
+
+    if (isLoading) return <p>Loading...</p>;
     if (isError) return <p>Failed to load joke</p>;
-
     return (
         <div>
-            <h2>{isFetching ? 'Loading...' : joke.question}</h2>
-            <p>{isFetching ? 'Please wait...' : joke.answer}</p>
-
-            {joke.votes.length > 0 && (
+            <div id={`${displayedJoke._id}`}>
+                <h2>
+                    {isFetchingNewJoke ? 'Loading...' : displayedJoke.question}
+                </h2>
+                <p>
+                    {isFetchingNewJoke
+                        ? 'Please wait...'
+                        : displayedJoke.answer}
+                </p>
+            </div>
+            {displayedJoke.votes.length > 0 && (
                 <div className="flex gap-2 mt-2">
-                    {joke.votes.map((vote) => (
+                    {displayedJoke.votes.map((vote) => (
                         <LabelButton
                             key={vote.label}
                             value={vote.value}
                             label={vote.label}
-                            jokeId={joke._id}
-                            updateJoke={setJoke} // Pass the update function directly
+                            jokeId={displayedJoke._id}
+                            updateJoke={setDisplayedJoke}
                         />
                     ))}
                 </div>
             )}
+            <NextJokeButton
+                handleNextJoke={handleNextJoke}
+                isFetching={isFetchingNewJoke}
+            />
         </div>
     );
 }

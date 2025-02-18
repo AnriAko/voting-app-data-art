@@ -1,12 +1,10 @@
-// pages/index.tsx
-
-import React from "react";
-import JokePanel from "@/Components/JokePanel";
+import React from 'react';
+import Joke from '@/Components/Joke';
 const Home = () => {
     return (
         <>
             <h1>Jokes Website</h1>
-            <JokePanel />
+            <Joke />
         </>
     );
 };
