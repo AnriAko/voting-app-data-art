@@ -9,11 +9,15 @@ export default async function handler(
 ) {
     try {
         if (req.method === "GET") {
-            return res.status(405).json({ error: "Method not allowed" });
+            const id: string = req.body.id as string;
+            const joke = await jokeService.getJokeById(id);
+            return res.status(200).json(joke);
         }
 
         if (req.method === "POST") {
-            const joke = await jokeService.createJoke();
+            const id: string = req.body.id as string;
+            const label: string = req.body.label as string;
+            const joke = await jokeService.addVoteToJoke(id, label);
             return res.status(201).json(joke);
         }
 

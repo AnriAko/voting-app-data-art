@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.66.3",
+    "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "mongoose": "^8.10.1",
     "next": "15.1.7",

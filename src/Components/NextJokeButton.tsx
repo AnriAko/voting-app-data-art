@@ -3,7 +3,7 @@ interface NextJokeButtonProps {
     isFetching: boolean;
 }
 
-export default function NextJokeButtonComponent({
+export default function NextJokeButton({
     handleNextJoke,
     isFetching,
 }: NextJokeButtonProps) {

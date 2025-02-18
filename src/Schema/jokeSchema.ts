@@ -1,17 +1,5 @@
-import mongoose, { Schema, Document } from "mongoose";
-
-export interface Vote {
-    value: number;
-    label: string;
-}
-
-export interface Joke extends Document {
-    _id: string;
-    question: string;
-    answer: string;
-    votes: Vote[];
-    availableVotes: string[];
-}
+import mongoose, { Schema } from "mongoose";
+import { Joke, Vote } from "../Types/jokeType";
 
 const voteSchema = new Schema<Vote>({
     value: { type: Number, required: true },

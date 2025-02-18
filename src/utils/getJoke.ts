@@ -1,4 +1,4 @@
-import { THJoke } from "./joke";
+import { THJoke } from "./THjoke";
 
 const getJoke = async (): Promise<THJoke | undefined> => {
     try {

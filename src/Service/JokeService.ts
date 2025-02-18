@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import JokeModel, { Joke, Vote } from "@/Schema/jokeSchema";
+import JokeModel from "@/Schema/jokeSchema";
+import { Joke, Vote } from "@/Types/jokeType";
 import getJoke from "@/utils/getJoke";
 
 class JokeService {
@@ -66,6 +67,23 @@ class JokeService {
         } catch (error: unknown) {
             if (error instanceof Error) {
                 console.error("Error adding vote:", error);
+                throw error;
+            } else {
+                throw new Error("Unknown error");
+            }
+        }
+    }
+    public async getJokeById(id: string): Promise<Joke | null> {
+        try {
+            await this.connectDb();
+            const joke = await JokeModel.findById(id);
+            if (!joke) {
+                throw new Error("Joke not found");
+            }
+            return joke;
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error getting joke by ID:", error);
                 throw error;
             } else {
                 throw new Error("Unknown error");
