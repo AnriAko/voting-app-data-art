@@ -3,7 +3,7 @@ export interface Vote {
     label: string;
 }
 
-export interface Joke extends Document {
+export interface Joke {
     _id: string;
     question: string;
     answer: string;
