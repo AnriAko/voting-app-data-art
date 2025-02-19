@@ -80,7 +80,11 @@ export default function JokeMenu({
                     >
                         ✖ Close
                     </button>
-                    <ul className="mt-4 space-y-1">
+                    <ul
+                        className={`mt-4 ${
+                            isMobileView ? 'space-y-5' : 'space-y-1'
+                        }`}
+                    >
                         <AddLabelButton
                             joke={joke}
                             isUpdatingJoke={isUpdatingJoke}

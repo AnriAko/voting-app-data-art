@@ -23,15 +23,20 @@ export default function Joke() {
     const [editedQuestion, setEditedQuestion] = useState('');
     const [editedAnswer, setEditedAnswer] = useState('');
     const [deleteMessage, setDeleteMessage] = useState<string | null>(null);
-    const [isMobileView, setIsMobileView] = useState(window.innerWidth < 1100);
+    const [isMobileView, setIsMobileView] = useState(false);
 
     useEffect(() => {
-        const handleResize = () => {
+        if (typeof window !== 'undefined') {
             setIsMobileView(window.innerWidth < 1100);
-        };
 
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+            const handleResize = () => {
+                setIsMobileView(window.innerWidth < 1100);
+            };
+            window.addEventListener('resize', handleResize);
+            return () => {
+                window.removeEventListener('resize', handleResize);
+            };
+        }
     }, []);
 
     const {
@@ -191,7 +196,7 @@ export default function Joke() {
 
             <div
                 className={`mt-8 flex justify-center ${
-                    isMobileView ? 'mt-[215px]' : ''
+                    isMobileView ? 'mt-[265px]' : ''
                 }`}
             >
                 <NextJokeButton
