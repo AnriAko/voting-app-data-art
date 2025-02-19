@@ -23,6 +23,16 @@ export default function Joke() {
     const [editedQuestion, setEditedQuestion] = useState('');
     const [editedAnswer, setEditedAnswer] = useState('');
     const [deleteMessage, setDeleteMessage] = useState<string | null>(null);
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth < 1100);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth < 1100);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const {
         data: joke = initialJoke,
@@ -145,26 +155,49 @@ export default function Joke() {
                     />
                 </div>
 
-                <div className="absolute top-1/2 right-[-70px] transform -translate-y-1/2">
-                    <JokeMenu
-                        joke={displayedJoke}
-                        updateDisplayedJoke={setDisplayedJoke}
-                        isUpdatingJoke={isUpdatingJoke}
-                        isEditing={isEditing}
-                        setIsUpdatingJoke={setIsUpdatingJoke}
-                        setIsEditing={handleEditToggle}
-                        handleConfirmEdit={handleConfirmEdit}
-                        setDisplayedJoke={setDisplayedJoke}
-                        setDeleteMessage={setDeleteMessage}
-                        handleNextJoke={handleNextJoke}
-                    />
-                </div>
+                {!isMobileView ? (
+                    <div className="absolute top-1/2 right-[-70px] transform -translate-y-1/2">
+                        <JokeMenu
+                            joke={displayedJoke}
+                            updateDisplayedJoke={setDisplayedJoke}
+                            isUpdatingJoke={isUpdatingJoke}
+                            isEditing={isEditing}
+                            setIsUpdatingJoke={setIsUpdatingJoke}
+                            setIsEditing={handleEditToggle}
+                            handleConfirmEdit={handleConfirmEdit}
+                            setDisplayedJoke={setDisplayedJoke}
+                            setDeleteMessage={setDeleteMessage}
+                            handleNextJoke={handleNextJoke}
+                        />
+                    </div>
+                ) : (
+                    <div className="mt-4 flex justify-center">
+                        <JokeMenu
+                            joke={displayedJoke}
+                            updateDisplayedJoke={setDisplayedJoke}
+                            isUpdatingJoke={isUpdatingJoke}
+                            isEditing={isEditing}
+                            setIsUpdatingJoke={setIsUpdatingJoke}
+                            setIsEditing={handleEditToggle}
+                            handleConfirmEdit={handleConfirmEdit}
+                            setDisplayedJoke={setDisplayedJoke}
+                            setDeleteMessage={setDeleteMessage}
+                            handleNextJoke={handleNextJoke}
+                            isMobileView={isMobileView}
+                        />
+                    </div>
+                )}
             </div>
 
-            <div className="mt-8 flex justify-center">
+            <div
+                className={`mt-8 flex justify-center ${
+                    isMobileView ? 'mt-[215px]' : ''
+                }`}
+            >
                 <NextJokeButton
                     handleNextJoke={handleNextJoke}
                     isFetching={isFetchingNewJoke}
+                    isMobileView={isMobileView}
                 />
             </div>
         </div>

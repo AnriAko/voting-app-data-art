@@ -17,6 +17,7 @@ interface JokeMenuProps {
     setDisplayedJoke: React.Dispatch<React.SetStateAction<Joke>>;
     setDeleteMessage: React.Dispatch<React.SetStateAction<string | null>>;
     handleNextJoke: () => void;
+    isMobileView?: boolean;
 }
 
 export default function JokeMenu({
@@ -30,6 +31,7 @@ export default function JokeMenu({
     setDisplayedJoke,
     setDeleteMessage,
     handleNextJoke,
+    isMobileView,
 }: JokeMenuProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLabelPanelOpen, setIsLabelPanelOpen] = useState(false);
@@ -66,7 +68,11 @@ export default function JokeMenu({
             {isMenuOpen && (
                 <div
                     ref={menuRef}
-                    className="absolute top-[-65px] bg-gray-100 left-full ml-2 w-[200px] shadow-lg p-4 rounded-lg"
+                    className={`absolute ${
+                        isMobileView
+                            ? 'top-full left-1/2 transform -translate-x-1/2 mt-2'
+                            : 'top-[-65px] left-full ml-2 '
+                    } bg-gray-100 w-[200px] shadow-lg p-4 rounded-lg`}
                 >
                     <button
                         onClick={() => setIsMenuOpen(false)}
