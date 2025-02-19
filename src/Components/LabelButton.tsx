@@ -1,44 +1,49 @@
 import React from 'react';
-import axios from 'axios';
 import { Joke } from '@/Types/jokeType';
+import FrontendJokeService from '@/Service/frontendJokeService';
 
 interface LabelButtonProps {
     label: string;
     value: number;
     jokeId: string;
-    updateJoke: (updatedJoke: Joke) => void;
+    updateJoke: React.Dispatch<React.SetStateAction<Joke>>;
+    isUpdatingJoke: boolean;
+    setIsUpdatingJoke: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const handleClick = async (
-    jokeId: string,
-    label: string,
-    updateJoke: (updatedJoke: Joke) => void
-) => {
-    try {
-        const response = await axios.post<Joke>(`/api/joke/${jokeId}`, {
-            label,
-        });
-
-        updateJoke(response.data);
-    } catch (error) {
-        console.error('Error voting on joke:', error);
-    }
-};
-
-const LabelButton: React.FC<LabelButtonProps> = ({
+export default function LabelButton({
     label,
     value,
     jokeId,
     updateJoke,
-}) => {
+    isUpdatingJoke,
+    setIsUpdatingJoke,
+}: LabelButtonProps) {
+    const handleClick = async (
+        jokeId: string,
+        label: string,
+        updateJoke: (updatedJoke: Joke) => void
+    ) => {
+        try {
+            setIsUpdatingJoke(true);
+            const updatedJoke = await FrontendJokeService.voteOnJoke(
+                jokeId,
+                label
+            );
+            updateJoke(updatedJoke);
+        } catch (error) {
+            console.error('Error voting on joke:', error);
+        } finally {
+            setIsUpdatingJoke(false);
+        }
+    };
     return (
         <button
+            disabled={isUpdatingJoke}
             onClick={() => handleClick(jokeId, label, updateJoke)}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md  hover:bg-blue-600 transition  disabled:cursor-not-allowed"
         >
             {label} {value}
         </button>
     );
-};
-
-export default LabelButton;
+}

@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import type { Joke } from '@/Types/jokeType';
 import LabelButton from './LabelButton';
 import NextJokeButton from './NextJokeButton';
+import FrontendJokeService from '@/Service/frontendJokeService';
 
 const initialJoke: Joke = {
     _id: '',
@@ -15,6 +16,9 @@ const initialJoke: Joke = {
 export default function Joke() {
     const [isFetchingNewJoke, setIsFetchingNewJoke] = useState(false);
     const [displayedJoke, setDisplayedJoke] = useState<Joke>(initialJoke);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [isUpdatingJoke, setIsUpdatingJoke] = useState(false);
+
     const {
         data: joke = initialJoke,
         isLoading,
@@ -22,15 +26,13 @@ export default function Joke() {
         refetch,
     } = useQuery<Joke, Error>({
         queryKey: ['joke'],
-        queryFn: async () => {
-            const res = await fetch('/api/joke/dead-men-tell-no');
-            if (!res.ok) throw new Error('Failed to fetch joke');
-            return res.json();
-        },
+        queryFn: FrontendJokeService.getJoke,
+        enabled: !isLoaded,
     });
     useEffect(() => {
         if (joke._id) {
             setDisplayedJoke(joke);
+            setIsLoaded(true);
         }
     }, [joke]);
 
@@ -60,21 +62,22 @@ export default function Joke() {
                         ? 'Please wait...'
                         : displayedJoke.answer}
                 </p>
+                {displayedJoke.votes.length > 0 && (
+                    <div className="flex gap-4 justify-center mt-6">
+                        {displayedJoke.votes.map((vote) => (
+                            <LabelButton
+                                key={vote.label}
+                                value={vote.value}
+                                label={vote.label}
+                                jokeId={displayedJoke._id}
+                                updateJoke={setDisplayedJoke}
+                                isUpdatingJoke={isUpdatingJoke}
+                                setIsUpdatingJoke={setIsUpdatingJoke}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
-
-            {displayedJoke.votes.length > 0 && (
-                <div className="flex gap-4 justify-center mt-6">
-                    {displayedJoke.votes.map((vote) => (
-                        <LabelButton
-                            key={vote.label}
-                            value={vote.value}
-                            label={vote.label}
-                            jokeId={displayedJoke._id}
-                            updateJoke={setDisplayedJoke}
-                        />
-                    ))}
-                </div>
-            )}
 
             <div className="mt-8 flex justify-center">
                 <NextJokeButton

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import JokeService from '@/Service/JokeService';
+import BackendJokeService from '@/Service/backendJokeService';
 
-const jokeService = new JokeService();
+const jokeService = new BackendJokeService();
 
 export default async function handler(
     req: NextApiRequest,

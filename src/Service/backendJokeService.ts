@@ -3,7 +3,7 @@ import JokeModel from '@/Schema/jokeSchema';
 import { Joke, Vote } from '@/Types/jokeType';
 import getJoke from '@/utils/getJoke';
 
-class JokeService {
+class BackendJokeService {
     private async connectDb() {
         if (mongoose.connections[0].readyState) {
             return;
@@ -92,4 +92,4 @@ class JokeService {
     }
 }
 
-export default JokeService;
+export default BackendJokeService;
