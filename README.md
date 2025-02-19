@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Voting Game
 
-## Getting Started
+Voting Game is a web application where users can vote on jokes using emojis! The app fetches jokes from an external API and provides functionality for voting, editing, and deleting jokes.
 
-First, run the development server:
+## How to Run
 
-```bash
+To get the project up and running, follow these simple steps:
+
+### 1. Install Dependencies
+
+In the root directory of the project, run the following command to install the dependencies:
+
+npm install
+
+### 2. Set Up Environment Variables
+
+To make the app work, you'll need to set up a few environment variables.
+
+Create a `.env` file in the root of your project and add the following lines:
+
+DB_URI=your_database_connection_string
+NODE_ENV=development
+NEXT_PUBLIC_FRONTEND_URL=http://localhost:3000
+
+`DB_URI` — The connection string to your database (e.g., MongoDB).
+`NODE_ENV=development` — Specifies that the app will run in development mode.
+`NEXT_PUBLIC_FRONTEND_URL=http://localhost:3000` — The URL for the frontend used when interacting with the backend.
+
+### 3. Start the App
+
+Once you have set up the environment variables, start the app:
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The app will be available at [http://localhost:3000](http://localhost:3000).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How the App Works
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1. Jokes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The app fetches jokes from an external API — [TeeHee Joke API](https://teehee.dev/api/joke). These jokes are used as the content displayed to users.
 
-## Learn More
+### 2. Backend
 
-To learn more about Next.js, take a look at the following resources:
+In `api/joke.ts`, there is an API that saves jokes to the database and sends them to the client. The database stores:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-   The text of the joke
+-   The vote counts for each emoji
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Frontend
 
-## Deploy on Vercel
+On the client side:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+-   The user can vote for jokes using emojis.
+-   The "Next Joke" button fetches a new joke.
+-   There are buttons for adding, editing, and deleting votes.
+-   The app also provides a menu for deleting and editing jokes.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Data Structure
+
+Each joke in the database looks like this:
+
+json
+
+CopyEdit
+
+`{
+  "id": "unique_joke_id",
+  "question": "Why did the developer go broke?",
+  "answer": "Because he used up all his cache!",
+  "votes": [
+    { "value": 10, "label": "😂" },
+    { "value": 5, "label": "👍" },
+    { "value": 3, "label": "❤️" }
+  ],
+  "availableVotes": ["😂", "👍", "❤️"]
+}
+`
+
+-   `votes` — A list of emojis with their corresponding vote counts.
+-   `availableVotes` — Available emojis for voting.
+
+## Frontend
+
+The frontend uses React, and styling is done with Tailwind CSS.
+Includes responsive design
+
+### Key Features:
+
+-   A random joke is displayed on the screen.
+-   Users can vote on the joke using emojis.
+-   The "Next Joke" button loads a new joke.
+-   There is a menu to edit, delete jokes, and add votes.
+
+## Backend
+
+### API Endpoints:
+
+1. **GET /api/joke** — Fetch a random joke.
+2. **POST /api/joke/:id** — Vote for a joke.
+3. **DELETE /api/joke/:id** — Delete a joke.
+4. **UPDATE /api/joke/:id** — Update the content of a joke.
+
+link of hosted app:
+https://voting-app-data-art-production.up.railway.app/
+(P.S some styles not working on hosted app)
