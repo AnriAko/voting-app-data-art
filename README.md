@@ -101,4 +101,4 @@ Includes responsive design
 
 link of hosted app:
 https://voting-app-data-art-production.up.railway.app/
-(P.S some styles not working on hosted app)
+(P.S some styles not working on hosted app, currently turned off)
